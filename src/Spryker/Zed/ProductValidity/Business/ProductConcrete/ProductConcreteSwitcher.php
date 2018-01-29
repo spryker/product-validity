@@ -1,0 +1,154 @@
+<?php
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
+namespace Spryker\Zed\ProductValidity\Business\ProductConcrete;
+
+use Orm\Zed\Product\Persistence\Map\SpyProductValidityTableMap;
+use Spryker\Zed\ProductValidity\Dependency\ProductValidityToProductFacadeInterface;
+use Spryker\Zed\ProductValidity\Persistence\ProductValidityQueryContainerInterface;
+use Spryker\Zed\PropelOrm\Business\Transaction\DatabaseTransactionHandlerTrait;
+use Traversable;
+
+class ProductConcreteSwitcher implements ProductConcreteSwitcherInterface
+{
+    use DatabaseTransactionHandlerTrait;
+
+    /**
+     * @var \Spryker\Zed\ProductValidity\Persistence\ProductValidityQueryContainerInterface
+     */
+    protected $queryContainer;
+
+    /**
+     * @var \Spryker\Zed\Product\Business\Product\ProductConcreteActivatorInterface
+     */
+    protected $productConcreteActivator;
+
+    /** @var  ProductValidityToProductFacadeInterface */
+    protected $productFacade;
+
+    /**
+     * @param ProductValidityQueryContainerInterface $queryContainer
+     * @param ProductValidityToProductFacadeInterface $productFacade
+     */
+    public function __construct(
+        ProductValidityQueryContainerInterface $queryContainer,
+        ProductValidityToProductFacadeInterface $productFacade
+    ) {
+        $this->queryContainer = $queryContainer;
+        $this->productFacade = $productFacade;
+    }
+
+    /**
+     * @return void
+     */
+    public function updateProductsValidity()
+    {
+        if (!$this->hasTriggeredProductValidity()) {
+            return;
+        }
+
+        $this->handleDatabaseTransaction(function () {
+            $productsBecomingActive = $this->findProductsBecomingActive();
+            $productsBecomingInactive = $this->findProductsBecomingInactive();
+
+            $this->executeProductPublishTransaction($productsBecomingActive, $productsBecomingInactive);
+        });
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasTriggeredProductValidity(): bool
+    {
+        $willProductsBecomeValid = $this
+            ->queryContainer
+            ->queryProductsBecomingValid()
+            ->select([SpyProductValidityTableMap::COL_ID_PRODUCT_VALIDITY])
+            ->findOne();
+
+        if ($willProductsBecomeValid) {
+            return true;
+        }
+
+        $willProductsBecomeInvalid = $this
+            ->queryContainer
+            ->queryProductsBecomingInvalid()
+            ->select([SpyProductValidityTableMap::COL_ID_PRODUCT_VALIDITY])
+            ->findOne();
+
+        if ($willProductsBecomeInvalid) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return \Orm\Zed\Product\Persistence\SpyProductValidity[]|\Traversable
+     */
+    protected function findProductsBecomingActive(): \Traversable
+    {
+        return $this
+            ->queryContainer
+            ->queryProductsBecomingValid()
+            ->find();
+    }
+
+    /**
+     * @return \Orm\Zed\Product\Persistence\SpyProductValidity[]|\Traversable
+     */
+    protected function findProductsBecomingInactive(): \Traversable
+    {
+        return $this
+            ->queryContainer
+            ->queryProductsBecomingInvalid()
+            ->find();
+    }
+
+    /**
+     * @param \Orm\Zed\Product\Persistence\SpyProductValidity[]|\Traversable $productsBecomingActive
+     * @param \Orm\Zed\Product\Persistence\SpyProductValidity[]|\Traversable $productsBecomingInactive
+     *
+     * @return void
+     */
+    protected function executeProductPublishTransaction(
+        Traversable $productsBecomingActive,
+        Traversable $productsBecomingInactive
+    ) {
+        $this->activateProductConcretes($productsBecomingActive);
+        $this->deactivateProductConcretes($productsBecomingInactive);
+    }
+
+    /**
+     * @param \Orm\Zed\Product\Persistence\SpyProductValidity[]|\Traversable $productValidityEntities
+     *
+     * @return void
+     */
+    protected function activateProductConcretes(Traversable $productValidityEntities)
+    {
+        foreach ($productValidityEntities as $productValidityEntity) {
+            $this->productFacade
+                ->activateProductConcrete(
+                    $productValidityEntity->getFkProduct()
+                );
+        }
+    }
+
+    /**
+     * @param \Orm\Zed\Product\Persistence\SpyProductValidity[]|\Traversable $productValidityEntities
+     *
+     * @return void
+     */
+    protected function deactivateProductConcretes(Traversable $productValidityEntities)
+    {
+        foreach ($productValidityEntities as $productValidityEntity) {
+            $this->productFacade
+                ->deactivateProductConcrete(
+                    $productValidityEntity->getFkProduct()
+                );
+        }
+    }
+}
