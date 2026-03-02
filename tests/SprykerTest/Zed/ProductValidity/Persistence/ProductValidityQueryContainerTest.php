@@ -36,18 +36,12 @@ class ProductValidityQueryContainerTest extends Unit
      */
     protected ProductValidityQueryContainerInterface $queryContainer;
 
-    /**
-     * @return void
-     */
     protected function _before(): void
     {
         parent::_before();
         $this->queryContainer = new ProductValidityQueryContainer();
     }
 
-    /**
-     * @return void
-     */
     public function testQueryProductsBecomingValidReturnsOnlyInactiveProducts(): void
     {
         // Arrange
@@ -122,9 +116,6 @@ class ProductValidityQueryContainerTest extends Unit
         );
     }
 
-    /**
-     * @return void
-     */
     public function testQueryProductsBecomingInvalidReturnsOnlyActiveProducts(): void
     {
         // Arrange

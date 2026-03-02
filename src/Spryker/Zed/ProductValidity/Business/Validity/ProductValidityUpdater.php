@@ -17,19 +17,11 @@ class ProductValidityUpdater implements ProductValidityUpdaterInterface
      */
     protected $productValidityQueryContainer;
 
-    /**
-     * @param \Spryker\Zed\ProductValidity\Persistence\ProductValidityQueryContainerInterface $productValidityQueryContainer
-     */
     public function __construct(ProductValidityQueryContainerInterface $productValidityQueryContainer)
     {
         $this->productValidityQueryContainer = $productValidityQueryContainer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductConcreteTransfer $productConcreteTransfer
-     *
-     * @return \Generated\Shared\Transfer\ProductConcreteTransfer
-     */
     public function update(ProductConcreteTransfer $productConcreteTransfer): ProductConcreteTransfer
     {
         $productConcreteTransfer->requireIdProductConcrete();

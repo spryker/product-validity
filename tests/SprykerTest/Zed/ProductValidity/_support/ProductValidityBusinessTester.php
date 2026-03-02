@@ -31,13 +31,6 @@ class ProductValidityBusinessTester extends Actor
 {
     use _generated\ProductValidityBusinessTesterActions;
 
-    /**
-     * @param int $idProduct
-     * @param \DateTime|null $validFrom
-     * @param \DateTime|null $validTo
-     *
-     * @return \Orm\Zed\ProductValidity\Persistence\SpyProductValidity
-     */
     public function haveValidity(int $idProduct, ?DateTime $validFrom, ?DateTime $validTo): SpyProductValidity
     {
         $productValidityEntity = (new SpyProductValidity())

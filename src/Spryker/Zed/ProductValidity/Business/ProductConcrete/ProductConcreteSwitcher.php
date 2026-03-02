@@ -27,10 +27,6 @@ class ProductConcreteSwitcher implements ProductConcreteSwitcherInterface
      */
     protected $productFacade;
 
-    /**
-     * @param \Spryker\Zed\ProductValidity\Persistence\ProductValidityQueryContainerInterface $queryContainer
-     * @param \Spryker\Zed\ProductValidity\Dependency\Facade\ProductValidityToProductFacadeInterface $productFacade
-     */
     public function __construct(
         ProductValidityQueryContainerInterface $queryContainer,
         ProductValidityToProductFacadeInterface $productFacade
@@ -39,9 +35,6 @@ class ProductConcreteSwitcher implements ProductConcreteSwitcherInterface
         $this->productFacade = $productFacade;
     }
 
-    /**
-     * @return void
-     */
     public function updateProductsValidity(): void
     {
         if (!$this->hasTriggeredProductValidity()) {
@@ -56,9 +49,6 @@ class ProductConcreteSwitcher implements ProductConcreteSwitcherInterface
         });
     }
 
-    /**
-     * @return bool
-     */
     protected function hasTriggeredProductValidity(): bool
     {
         $willProductsBecomeValid = $this

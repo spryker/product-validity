@@ -14,12 +14,6 @@ use Spryker\Zed\ProductValidity\ProductValidityConfig;
 
 class ProductValidityMapper
 {
-    /**
-     * @param \Orm\Zed\ProductValidity\Persistence\SpyProductValidity $productValidityEntity
-     * @param \Generated\Shared\Transfer\ProductValidityTransfer $productValidityTransfer
-     *
-     * @return \Generated\Shared\Transfer\ProductValidityTransfer
-     */
     public function mapProductValidityEntityToProductValidityTransfer(
         SpyProductValidity $productValidityEntity,
         ProductValidityTransfer $productValidityTransfer
@@ -32,11 +26,6 @@ class ProductValidityMapper
             ->setValidTo(is_string($validTo) ? $validTo : $this->formatDateTime($validTo));
     }
 
-    /**
-     * @param \DateTime|null $dateTime
-     *
-     * @return string|null
-     */
     protected function formatDateTime(?DateTime $dateTime): ?string
     {
         return $dateTime ? $dateTime->format(ProductValidityConfig::VALIDITY_DATE_TIME_FORMAT) : null;

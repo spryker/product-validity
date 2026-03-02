@@ -32,9 +32,6 @@ class ProductValidityBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\ProductValidity\Business\Validity\ProductValidityReaderInterface
-     */
     public function createProductValidityReader(): ProductValidityReaderInterface
     {
         return new ProductValidityReader(

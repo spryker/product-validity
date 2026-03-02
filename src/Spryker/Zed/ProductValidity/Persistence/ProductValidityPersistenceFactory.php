@@ -18,17 +18,11 @@ use Spryker\Zed\ProductValidity\Persistence\Mapper\ProductValidityMapper;
  */
 class ProductValidityPersistenceFactory extends AbstractPersistenceFactory
 {
-    /**
-     * @return \Orm\Zed\ProductValidity\Persistence\SpyProductValidityQuery
-     */
     public function createProductValidityQuery(): SpyProductValidityQuery
     {
         return SpyProductValidityQuery::create();
     }
 
-    /**
-     * @return \Spryker\Zed\ProductValidity\Persistence\Mapper\ProductValidityMapper
-     */
     public function createProductValidityMapper(): ProductValidityMapper
     {
         return new ProductValidityMapper();

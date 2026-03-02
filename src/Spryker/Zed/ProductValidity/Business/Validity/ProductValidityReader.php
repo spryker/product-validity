@@ -16,9 +16,6 @@ class ProductValidityReader implements ProductValidityReaderInterface
      */
     protected $productValidityRepository;
 
-    /**
-     * @param \Spryker\Zed\ProductValidity\Persistence\ProductValidityRepositoryInterface $productValidityRepository
-     */
     public function __construct(
         ProductValidityRepositoryInterface $productValidityRepository
     ) {

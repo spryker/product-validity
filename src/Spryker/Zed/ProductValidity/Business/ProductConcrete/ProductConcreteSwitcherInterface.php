@@ -9,8 +9,5 @@ namespace Spryker\Zed\ProductValidity\Business\ProductConcrete;
 
 interface ProductConcreteSwitcherInterface
 {
-    /**
-     * @return void
-     */
     public function updateProductsValidity(): void;
 }

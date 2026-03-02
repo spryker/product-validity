@@ -22,21 +22,11 @@ class ProductValidityToProductFacadeBridge implements ProductValidityToProductFa
         $this->productFacade = $productFacade;
     }
 
-    /**
-     * @param int $idProductConcrete
-     *
-     * @return void
-     */
     public function activateProductConcrete(int $idProductConcrete): void
     {
         $this->productFacade->activateProductConcrete($idProductConcrete);
     }
 
-    /**
-     * @param int $idProductConcrete
-     *
-     * @return void
-     */
     public function deactivateProductConcrete(int $idProductConcrete): void
     {
         $this->productFacade->deactivateProductConcrete($idProductConcrete);

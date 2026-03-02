@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerTest\Zed\ProductValidity\ProductValidityFacade;
+namespace SprykerTest\Zed\ProductValidity\Business\ProductValidityFacade;
 
 use Codeception\Test\Unit;
 use DateTime;
@@ -18,6 +18,7 @@ use Spryker\Zed\ProductValidity\ProductValidityConfig;
  * @group SprykerTest
  * @group Zed
  * @group ProductValidity
+ * @group Business
  * @group ProductValidityFacade
  * @group ExpandProductConcreteTransfersWithValidityTest
  * Add your own group annotations below this line
@@ -29,9 +30,6 @@ class ExpandProductConcreteTransfersWithValidityTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     public function testExpandProductConcreteTransfersWithValiditySuccessful(): void
     {
         // Arrange
